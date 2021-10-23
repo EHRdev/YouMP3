@@ -19,26 +19,31 @@ import ytdl from 'react-native-ytdl';
 import css from '../Styles/Styles';
 import 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Animatable from 'react-native-animatable';
 import RNFetchBlob from 'rn-fetch-blob';
 
 //---------------------------------------------------------------
 
-const android = RNFetchBlob.android;
+var typeError = ''; //----- Global
 
 class ListDownloads extends Component {
   constructor(props) {
     super(props);
     this.state = {
       newObject: [],
-      currentItem: '',
+      currentItem: [],
       keys: [],
+
       colorLine: '',
+      isIndeterminate: false,
       downloadProgress: '',
+      status: 'DESCARGANDO',
+
       pathForOpen: '',
     };
   }
 
-  componentWillMount(){
+  componentDidMount(){
     this.getMultiple();
   }
 
@@ -67,93 +72,83 @@ class ListDownloads extends Component {
     }
   };
 
-  downloadMachineX = async () => {
-
-    let item = this.state.currentItem;
-    const { dirs } = RNFetchBlob.fs;
-    const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
-    const filename = item.title;
-    const type = 'mp3';
-    let filePath = `${dirToSave}/${filename}.${type}`;
-
-    RNFetchBlob
-    .config({
-        addAndroidDownloads : {
-            useDownloadManager : true,
-            notification : true,
-            mime : 'audio/webm',
-            description : 'File downloaded by download manager.',
-            fileCache: true,
-            title: filename,
-            path: filePath,
-            appendExt: 'mp3',
-        }
-    })
-    .fetch('GET', item.src)
-    .then((resp) => {
-      console.log('The file saved to', resp.path());
-    })
+  completedDownload = () => {
+    this.setState({
+      isIndeterminate: false,
+      status: 'Completado ✔️',
+      downloadProgress: 1,
+      //disabledPlay: false,
+      //disabledClose: false,
+      //showSnack: true,
+    });
   }
 
-  downloadMachine = async () => {
+  androidProcess = () => {
+    this.setState({
+      isIndeterminate: true,
+    });
+}
 
-    let item = this.state.currentItem;
-    console.log('current item - download machine', item);
-    console.log('current item - src', item.src);
+  downloadMachine = async () => {
+    let item = this.state.currentItem[0];
+    console.log('Mi Item Unico: ', item);
+
+    //let item = this.state.currentItem.slice(item.length - 1).map((item) => item);
+    //console.log('Mi Item Final: ', item);
 
     const { dirs } = RNFetchBlob.fs;
+    let filename = item.title;
+    let type = item.type;
+
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
-    const filename = item.title;
-    const type = 'mp3';
+    console.log(dirToSave, '<< Document Path');
+
     let filePath = `${dirToSave}/${filename}.${type}`;
+    console.log(filePath, '<< File Path');
 
-    console.log(dirToSave, '<< Document Path MP3');
-    console.log(filePath, '<< File Path MP3');
+    this.setState({
+      //
+    });
 
-    //this.setState({show: false, progressModal: true, route: dirToSave, isMP3: true});
+    Platform.OS === 'android' ? this.androidProcess() : null;
+
     RNFetchBlob.config(
       Platform.select({
         ios: {
           fileCache: true,
           title: filename,
           path: filePath,
-          appendExt: 'mp3',
+          appendExt: item.type,
         },
         android: {
-          fileCache: true,
-          title: filename,
-          path: filePath,
-          appendExt: 'mp3',
+          addAndroidDownloads: {
+            useDownloadManager: true,
+            notification: true,
+            title: filename,
+            description: item.type,
+            path: filePath,
+            fileCache: true,
+            mime: item.type,
+            //mime: 'audio/webm',
+          },
         },
     }))
-      .fetch('GET', item.src)
+    .fetch('GET', item.src)
       .progress((received, total) => {
         console.log('progress', received / total);
         this.setState({downloadProgress: received / total});
       })
       .then(resp => {
-        console.log('resp: ', resp);
+          console.log('Response: ', resp);
           this.setState({pathForOpen: resp.path()});
-              if (Platform.OS === 'ios') {
-                //this.completedDownload();
-                //RNFetchBlob.ios.openDocument(resp.data);
-              }
-              if (Platform.OS === 'android') {
-                //this.completedDownload();
-                RNFetchBlob.android.addCompleteDownload({
-                  title: `${filename}.${type}`,
-                  description: 'Descarga Completa',
-                  mime: 'audio/webm',
-                  path: resp.path(),
-                  //showNotification: true,
-                });
-              }
-              console.log('The file saved to', resp.path());
+          this.completedDownload();
+          console.log('The file saved to', resp.path());
         })
         .catch((e) => {
           console.log('Error >>', e.message);
+          //typeError = e.message;
         });
-  };
+  }
 
     getMultiple = async () => {
       let keys = [];
@@ -165,12 +160,6 @@ class ListDownloads extends Component {
         values = await AsyncStorage.multiGet(keys);
         console.log('values: ', values);
 
-        const currentItemRaw = await AsyncStorage.getItem(keys[keys.length - 1]);
-        console.log('currentItemRaw: ', currentItemRaw);
-
-        var currentItem = JSON.parse(currentItemRaw);
-        console.log('currentItem: ', currentItem);
-
         let xvalues = values.map(item => {
           return JSON.parse(item[1]);
         });
@@ -179,10 +168,11 @@ class ListDownloads extends Component {
 
         this.setState({
           newObject: xvalues,
-          currentItem: currentItem,
+          currentItem: xvalues,
         });
 
-        return currentItem;
+        //-----------------To DownLoad Machine
+        //this.state.currentItem.length === 0 ? console.log('Sin Elementos para Descargar') : this.downloadMachine();
       } catch (e) {
         // read error
       }
@@ -201,28 +191,34 @@ class ListDownloads extends Component {
 
   render() {
     console.log(this.state);
-    const { newObject, currentItem } = this.state;
+    const { newObject, currentItem, downloadProgress, status, isIndeterminate } = this.state;
 
     return (
       <Fragment>
         <ScrollView>
-            <View style={css.currentBox}>
-                <Image style={css.iconDownloadImg} source={{ uri: currentItem.img }} />
-                <View style={css.currentBoxRight}>
-                    <Title style={css.titleListDownloads}>{currentItem.title}</Title>
-                    <Title style={css.titleListDownloads}>Descargando...</Title>
-                    <ProgressBar progress={0.5} color="red" />
+        {currentItem.slice(currentItem.length - 1).map((item, index) => (
+              <Fragment key={index}>
+                <View style={css.currentBox}>
+                    <View style={css.currentBoxLeft}>
+                        <Image style={css.iconDownloadImg} source={{ uri: item.img }} />
+                    </View>
+                    <View style={css.currentBoxRight}>
+                        <Title style={css.titleListDownloads} numberOfLines={1}>{item.title}</Title>
+                        <Animatable.Text animation="pulse" style={css.statusStyle} iterationCount="infinite">{status}</Animatable.Text>
+                        <ProgressBar progress={downloadProgress} indeterminate={isIndeterminate} style={css.progressSize}/>
+                    </View>
                 </View>
-            </View>
-          {newObject.reverse().slice(1).map((item, index) => (
+              </Fragment>
+            ))}
+          {newObject.reverse().slice(1).map((item, index2) => (
               <List.Item
-              key={index}
+              key={index2}
               title={item.title}
               titleStyle={css.titleListDownloads}
-              description={item.date}
+              description={'Descargado el ' + item.date + ' | ' + item.type.toUpperCase() + ' | ' + Math.trunc(item.size / 1000000) + 'Mb' }
               descriptionStyle={css.descListDownloads}
               style={css.listDownloads}
-              onPress={() => this.downloadMachine()}
+              onPress={() => null}
               left={props =>
                 <View style={css.iconDownload}>
                   <Image style={css.iconDownloadImg} source={{ uri: item.img }} />
