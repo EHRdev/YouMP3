@@ -85,6 +85,8 @@ const css = StyleSheet.create({
   },
   selectFormat: {
     flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
   },
   labelBtnFormat: {
     fontSize: 16,
@@ -126,11 +128,88 @@ const css = StyleSheet.create({
   loadingModal: {
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
+  //--- Dialog in ListSong ---
+  dialogContent: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 15,
+  },
+  dialogTitle: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    textAlign: 'justify',
+    lineHeight: 15,
+  },
+  dialogRaw: {
+    flexDirection: 'row',
+  },
+  dialogBtnMP4: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 150,
+    height: 50,
+    margin: 5,
+  },
+  dialogBtnMP3: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 150,
+    height: 50,
+    margin: 5,
+    backgroundColor: '#E8E8E8', // Botón gris
+  },
+  dialogTxtBtn: {
+    fontSize: 16,
+    letterSpacing: 1,
+  },
+  surfaceBoxCross: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
+    width: 50,
+    height: 50,
+    elevation: 4,
+    margin: 5,
+    borderRadius: 4,
+  },
+  surfaceBox: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
+    width: 50,
+    height: 50,
+    elevation: 4,
+    margin: 5,
+    borderRadius: 4,
+  },
+  surfaceTxt: {
+    fontSize: 9,
+    letterSpacing: -1 / 2,
+    textAlign: 'center',
+  },
+  surfaceNum: {
+    fontSize: 13,
+    textAlign: 'center',
+    color: appYellow,
+    margin: 0,
+    marginRight: 1,
+  },
+  surfaceSub: {
+    fontSize: 9,
+    textAlign: 'center',
+  },
+  txtQuality: {
+    fontSize: 13,
+    color: 'red',
+  },
 
   //------------------------ ListDownloads Screen
   listDownloads: {
     height: 80,
-
   },
   iconDownloadImg: {
     width: 50,
@@ -140,12 +219,13 @@ const css = StyleSheet.create({
   },
   titleListDownloads: {
     fontSize: 14,
-    letterSpacing: -1 / 2,
-    lineHeight: 15,
+    letterSpacing: -1,
+    //lineHeight: 15,
   },
   statusStyle: {
-    fontSize: 11,
-    letterSpacing: 1,
+    textAlign: 'center',
+    fontSize: 10,
+    letterSpacing: 2,
     //lineHeight: 15,
     color: appYellow,
   },
@@ -167,6 +247,7 @@ const css = StyleSheet.create({
     width: windowWidth,
     flexDirection: 'row',
     marginLeft: 8,
+    marginRight: 20,
   },
   currentBoxLeft: {
     width: 50,
@@ -174,11 +255,12 @@ const css = StyleSheet.create({
     overflow: 'hidden',
   },
   currentBoxRight: {
-    //width: 'fill',
+    width: '80%', // Checar en iOS
+    alignSelf: 'stretch',
     flexDirection: 'column',
     justifyContent: 'center',
     marginLeft: 8,
-    marginRight: 8,
+    marginRight: 20,
   },
 
 

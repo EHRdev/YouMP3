@@ -172,7 +172,7 @@ class ListDownloads extends Component {
         });
 
         //-----------------To DownLoad Machine
-        //this.state.currentItem.length === 0 ? console.log('Sin Elementos para Descargar') : this.downloadMachine();
+        this.state.currentItem.length === 0 ? console.log('Sin Elementos para Descargar') : this.downloadMachine();
       } catch (e) {
         // read error
       }
@@ -215,7 +215,7 @@ class ListDownloads extends Component {
               key={index2}
               title={item.title}
               titleStyle={css.titleListDownloads}
-              description={'Descargado el ' + item.date + ' | ' + item.type.toUpperCase() + ' | ' + Math.trunc(item.size / 1000000) + 'Mb' }
+              description={'Descargado el ' + item.date + ' | ' + item.type + ' | ' + Math.trunc(item.size / 1000000) + 'Mb' }
               descriptionStyle={css.descListDownloads}
               style={css.listDownloads}
               onPress={() => null}

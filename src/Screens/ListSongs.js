@@ -13,6 +13,10 @@ import {
   ActivityIndicator,
   Portal,
   Modal,
+  Dialog,
+  Divider,
+  Surface,
+  Text,
 } from 'react-native-paper';
 import ytdl from 'react-native-ytdl';
 import css from '../Styles/Styles';
@@ -40,6 +44,10 @@ class ListSongs extends Component {
       showBtn: false,
       loading: false,
 
+      moreFormats: false,
+      portalMore: false,
+      loadingInPortal: false,
+
       obj: [
         {
           key: '',
@@ -52,6 +60,8 @@ class ListSongs extends Component {
       ],
     };
   }
+
+  hideShowMore = () => this.setState({portalMore: false});
 
   _navigate = () => {
     this.setState({loading: false});
@@ -73,10 +83,10 @@ class ListSongs extends Component {
     }
   };
 
-  showItem = async (id, xtype) => {
+  showItem = async (video_id, xtype) => {
     this.setState({showBtn: true, loading: true});
-    const youtube = 'http://www.youtube.com/watch?v=';
-    const itemInfo = await ytdl.getInfo(youtube + id);
+    const yt = 'http://www.youtube.com/watch?v=';
+    const itemInfo = await ytdl.getInfo(yt + video_id);
     console.log('INFO found!', itemInfo);
 
     let audioonly = ytdl.filterFormats(itemInfo.formats, 'audioonly');
@@ -112,8 +122,23 @@ class ListSongs extends Component {
     this.storeData(this.state.obj);
   }
 
-  showItemMore = async id => {
-    console.log('more');
+  showAll_Items = async (video_id) => {
+    this.setState({portalMore: true, loadingInPortal: true});
+    const yt = 'http://www.youtube.com/watch?v=';
+    const itemInfo = await ytdl.getInfo(yt + video_id);
+    console.log('INFO found!', itemInfo);
+
+    let videowithAudio = ytdl.filterFormats(itemInfo.formats, 'audioandvideo');
+    //console.log('audioandvideo: ', videowithAudio);
+
+    let audioonly = ytdl.filterFormats(itemInfo.formats, 'audioonly');
+    //console.log('audioonly: ', audioonly);
+
+    this.setState({
+      videowithAudio: videowithAudio,
+      audioonly: audioonly,
+      loadingInPortal: false,
+    });
   }
 
   searchMore = () => {
@@ -139,7 +164,7 @@ class ListSongs extends Component {
 
   render() {
     console.log(this.state);
-    const { songList, btnLoadMore, loading } = this.state;
+    const { songList, btnLoadMore, loading, moreFormats, portalMore, loadingInPortal, videowithAudio, audioonly} = this.state;
     //const { songList, tokenNext } = this.props.route.params;
 
     return (
@@ -178,7 +203,7 @@ class ListSongs extends Component {
                       <Button
                         style={css.btnMore}
                         mode="contained"
-                        onPress={() => this.showItem(item.id.videoId)}
+                        onPress={() => this.showAll_Items(item.id.videoId)}
                         labelStyle={css.labelBtnMore}>
                           +
                       </Button>
@@ -193,16 +218,77 @@ class ListSongs extends Component {
               labelStyle={css.labelSearchMore}>
                 Cargar Más
               </Button>
-            : null }
+            : null
+          }
         </ScrollView>
-        {loading ? (
-          <Portal>
-            <Modal style={css.loadingModal} visible={true}>
-              <ActivityIndicator animating={true} size="large"/>
-            </Modal>
-          </Portal>
-            ) : null
-        }
+          {loading ? (
+            <Portal>
+              <Modal style={css.loadingModal} visible={true}>
+                <ActivityIndicator animating={true} size="large"/>
+              </Modal>
+            </Portal>
+              ) : null
+          }
+          {portalMore ? (
+            <Portal>
+              <Dialog visible={true} onDismiss={this.hideShowMore}>
+                <Dialog.Title style={css.dialogTitle}>FORMATOS DISPONIBLES</Dialog.Title>
+                <Divider/>
+                <Dialog.Content style={css.dialogContent}>
+                  {loadingInPortal ? (
+                      <ActivityIndicator animating={true} size="large"/>
+                    ) : (
+                        <View>
+                          {videowithAudio.map((item, index) => (
+                            <View key={index} style={css.dialogRaw}>
+                              <Button
+                                style={css.dialogBtnMP4}
+                                icon="play"
+                                mode="contained"
+                                onPress={() => this.downloadMP4_legacy(item)}
+                                labelStyle={css.dialogTxtBtn}>
+                                MP4
+                              </Button>
+                              <Surface style={css.surfaceBox}>
+                                <Text style={css.surfaceNum}>{item.qualityLabel}</Text>
+                              </Surface>
+                              <Surface style={css.surfaceBox}>
+                                <Text style={css.surfaceNum}>{Math.trunc(item.contentLength / 1000000)}</Text>
+                                <Text style={css.surfaceSub}>Mb</Text>
+                              </Surface>
+                            </View>
+                          ))}
+                          {audioonly.map((item, index) => (
+                            <View key={index} style={css.dialogRaw}>
+                              <Button
+                                style={css.dialogBtnMP3}
+                                icon="music"
+                                mode="contained"
+                                onPress={() => this.downloadMP3_legacy(item)}
+                                labelStyle={css.dialogTxtBtn}>
+                                MP3
+                                </Button>
+                              <Surface style={css.surfaceBoxCross}>
+                                {item.audioBitrate === 160 ? (<Text style={css.txtQuality}>HQ</Text>) : (item.audioBitrate === 128 ? (<Text style={css.txtQuality}>STD</Text>) : (item.audioBitrate === 64 ? (<Text style={css.txtQuality}>RIP</Text>) : (item.audioBitrate === 48 ? (<Text style={css.txtQuality}>XRIP</Text>) : (null)))) }
+                                <Text style={css.surfaceTxt}>{item.audioBitrate + ' Kbps'}</Text>
+                              </Surface>
+                              <Surface style={css.surfaceBox}>
+                                <Text style={css.surfaceNum}>{Math.trunc(item.contentLength / 1000000)}</Text>
+                                <Text style={css.surfaceSub}>MB</Text>
+                              </Surface>
+                            </View>
+                          ))}
+                      </View>
+                    )
+                  }
+                </Dialog.Content>
+                <Dialog.Actions>
+                  <Button onPress={this.hideShowMore}>Regresar</Button>
+                </Dialog.Actions>
+              </Dialog>
+            </Portal>
+              ) : null
+          }
         </Fragment>
     );
   }
