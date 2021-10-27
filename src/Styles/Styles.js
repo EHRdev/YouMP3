@@ -98,14 +98,14 @@ const css = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 100,
-    height: 48,
+    height: 50,
     margin: 5,
   },
   btnMp3: {
     justifyContent: 'center',
     alignItems: 'center',
     width: 100,
-    height: 48,
+    height: 50,
     margin: 5,
     backgroundColor: '#E8E8E8', // Botón gris
   },
@@ -113,7 +113,7 @@ const css = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 50,
-    height: 48,
+    height: 50,
     margin: 5,
     backgroundColor: '#6FECB7', // Botón verde
   },
@@ -187,19 +187,34 @@ const css = StyleSheet.create({
     borderRadius: 4,
   },
   surfaceTxt: {
-    fontSize: 9,
+    fontSize: 10,
     letterSpacing: -1 / 2,
     textAlign: 'center',
   },
   surfaceNum: {
+    fontSize: 11,
+    textAlign: 'center',
+    color: appLightRed,
+    fontWeight: 'bold',
+    //margin: 0,
+  },
+  surfaceNum2: {
     fontSize: 13,
     textAlign: 'center',
     color: appYellow,
     margin: 0,
-    marginRight: 1,
+    marginRight: 2,
+    letterSpacing: -1,
+  },
+  surfaceNum3: {
+    fontSize: 13,
+    textAlign: 'center',
+    color: '#4CCEFF',
+    margin: 0,
+    letterSpacing: -1,
   },
   surfaceSub: {
-    fontSize: 9,
+    fontSize: 11,
     textAlign: 'center',
   },
   txtQuality: {

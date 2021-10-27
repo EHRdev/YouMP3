@@ -52,20 +52,18 @@ class ListDownloads extends Component {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         {
-          title: 'Storage Permission Title',
+          title: 'Permisos para Descargar',
           message:
-            'Cool Photo App needs access to your camera ' +
-            'so you can take awesome pictures.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
+            'Permite que se descarguen archivos en tu dispositivo.',
+          buttonNegative: 'Cancelar',
+          buttonPositive: 'Ok',
         }
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can use the camera');
+        console.log('You can use storage');
         this.downloadMachine();
       } else {
-        console.log('Camera permission denied');
+        console.log('Storage permission denied');
       }
     } catch (err) {
       console.warn(err);
@@ -172,7 +170,7 @@ class ListDownloads extends Component {
         });
 
         //-----------------To DownLoad Machine
-        this.state.currentItem.length === 0 ? console.log('Sin Elementos para Descargar') : this.downloadMachine();
+        this.state.currentItem.length === 0 ? console.log('Sin Elementos para Descargar') : this.requestPermissions();
       } catch (e) {
         // read error
       }
@@ -215,7 +213,7 @@ class ListDownloads extends Component {
               key={index2}
               title={item.title}
               titleStyle={css.titleListDownloads}
-              description={'Descargado el ' + item.date + ' | ' + item.type + ' | ' + Math.trunc(item.size / 1000000) + 'Mb' }
+              description={'Descargado el ' + item.date + ' | ' + item.type + ' | ' + Math.round((item.size / 1000000) * 100 ) / 100 + 'Mb' }
               descriptionStyle={css.descListDownloads}
               style={css.listDownloads}
               onPress={() => null}

@@ -129,7 +129,7 @@ class ListSongs extends Component {
     console.log('INFO found!', itemInfo);
 
     let videowithAudio = ytdl.filterFormats(itemInfo.formats, 'audioandvideo');
-    //console.log('audioandvideo: ', videowithAudio);
+    console.log('audioandvideo: ', videowithAudio);
 
     let audioonly = ytdl.filterFormats(itemInfo.formats, 'audioonly');
     //console.log('audioonly: ', audioonly);
@@ -245,15 +245,15 @@ class ListSongs extends Component {
                                 style={css.dialogBtnMP4}
                                 icon="play"
                                 mode="contained"
-                                onPress={() => this.downloadMP4_legacy(item)}
+                                onPress={() => this.showItem(item.id.videoId, 'mp4')}
                                 labelStyle={css.dialogTxtBtn}>
                                 MP4
                               </Button>
                               <Surface style={css.surfaceBox}>
-                                <Text style={css.surfaceNum}>{item.qualityLabel}</Text>
+                                <Text style={css.surfaceNum3}>{item.qualityLabel}</Text>
                               </Surface>
                               <Surface style={css.surfaceBox}>
-                                <Text style={css.surfaceNum}>{Math.trunc(item.contentLength / 1000000)}</Text>
+                              <Text style={css.surfaceNum2}>{Math.round((item.contentLength / 1000000) * 10) / 10}</Text>
                                 <Text style={css.surfaceSub}>Mb</Text>
                               </Surface>
                             </View>
@@ -264,17 +264,17 @@ class ListSongs extends Component {
                                 style={css.dialogBtnMP3}
                                 icon="music"
                                 mode="contained"
-                                onPress={() => this.downloadMP3_legacy(item)}
+                                onPress={() => this.showItem(item.id.videoId, 'mp3')}
                                 labelStyle={css.dialogTxtBtn}>
                                 MP3
                                 </Button>
                               <Surface style={css.surfaceBoxCross}>
-                                {item.audioBitrate === 160 ? (<Text style={css.txtQuality}>HQ</Text>) : (item.audioBitrate === 128 ? (<Text style={css.txtQuality}>STD</Text>) : (item.audioBitrate === 64 ? (<Text style={css.txtQuality}>RIP</Text>) : (item.audioBitrate === 48 ? (<Text style={css.txtQuality}>XRIP</Text>) : (null)))) }
-                                <Text style={css.surfaceTxt}>{item.audioBitrate + ' Kbps'}</Text>
+                                <Text style={css.surfaceNum}>{item.audioBitrate}</Text>
+                                <Text style={css.surfaceTxt}>{'Kbps'}</Text>
                               </Surface>
                               <Surface style={css.surfaceBox}>
-                                <Text style={css.surfaceNum}>{Math.trunc(item.contentLength / 1000000)}</Text>
-                                <Text style={css.surfaceSub}>MB</Text>
+                                <Text style={css.surfaceNum2}>{Math.round((item.contentLength / 1000000) * 10) / 10}</Text>
+                                <Text style={css.surfaceSub}>Mb</Text>
                               </Surface>
                             </View>
                           ))}
