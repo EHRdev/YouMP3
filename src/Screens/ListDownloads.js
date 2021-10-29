@@ -51,7 +51,7 @@ class ListDownloads extends Component {
       dialogElement: false,
 
       showSnack: false,
-      btnOpen: false,
+      btnOpen: true,
       progressColor: appYellow,
     };
   }

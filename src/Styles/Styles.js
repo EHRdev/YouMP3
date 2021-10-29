@@ -233,7 +233,7 @@ const css = StyleSheet.create({
     alignSelf: 'center',
   },
   labelOpen: {
-    fontSize: 9,
+    fontSize: 7,
   },
   titleListDownloads: {
     fontSize: 14,
