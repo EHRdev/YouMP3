@@ -48,6 +48,8 @@ class ListSongs extends Component {
       portalMore: false,
       loadingInPortal: false,
 
+      IDvid: '',
+
       obj: [
         {
           key: '',
@@ -56,6 +58,8 @@ class ListSongs extends Component {
           date: '',
           src: '',
           type: '',
+          size: '',
+          mime: '',
         },
       ],
     };
@@ -83,60 +87,104 @@ class ListSongs extends Component {
     }
   };
 
+  setEspecificItem = (item, xtype) => {
+    console.log('mi item en setEspecificItem', item);
+    let { itemInfo } = this.state;
+
+    let elementMim;
+    xtype === 'mp3' ? (
+        elementMim = 'audio/mp3'
+          ) : (
+        elementMim = 'video/mp4'
+      );
+
+      let myObj = {
+            key: moment().locale('es-mx').format(),
+            title: itemInfo.videoDetails.title,
+            img: itemInfo.videoDetails.thumbnails[0].url,
+            date: moment().locale('es-mx').format('L, h:mm:ss a'),
+            src: item.url,
+            type: xtype,
+            size: item.contentLength,
+            mime: elementMim,
+          };
+
+      this.setState({
+        obj: myObj,
+        portalMore: false,
+      });
+
+      this.storeData(myObj);
+  }
+
   showItem = async (video_id, xtype) => {
     this.setState({showBtn: true, loading: true});
     const yt = 'http://www.youtube.com/watch?v=';
-    const itemInfo = await ytdl.getInfo(yt + video_id);
-    console.log('INFO found!', itemInfo);
 
-    let audioonly = ytdl.filterFormats(itemInfo.formats, 'audioonly');
-    //console.log('audioonly: ', audioonly);
-    let song = audioonly.filter(audio => audio.audioBitrate === 64).map((audio) => audio);
-    //console.log('song: ', song);
+    try {
+      const itemInfo = await ytdl.getInfo(yt + video_id);
+      console.log('INFO found!', itemInfo);
 
-    let videowithAudio = ytdl.filterFormats(itemInfo.formats, 'audioandvideo');
-    //console.log('audioandvideo: ', videowithAudio);
+      let audioonly = ytdl.filterFormats(itemInfo.formats, 'audioonly');
+      let song = audioonly.filter(audio => audio.audioBitrate === 64).map((audio) => audio);
 
-    let elementeSrc;
-    let elementSize;
-    xtype === 'mp3' ? (
-      elementeSrc = song[0].url,
-      elementSize = song[0].contentLength
-        ) : (
-      elementeSrc = videowithAudio[0].url,
-      elementSize = videowithAudio[0].contentLength
-    );
+      let videowithAudio = ytdl.filterFormats(itemInfo.formats, 'audioandvideo');
+      console.log('audioandvideo: ', videowithAudio + 'audioonly: ', audioonly + 'song: ', song);
 
-    this.setState({
-      obj: {
-        key: moment().locale('es-mx').format(),
-        title: itemInfo.videoDetails.title,
-        img: itemInfo.videoDetails.thumbnails[0].url,
-        date: moment().locale('es-mx').format('L, h:mm:ss a'),
-        src: elementeSrc,
-        type: xtype,
-        size: elementSize,
-      },
-    });
+      let elementeSrc;
+      let elementSize;
+      let elementMim;
+      xtype === 'mp3' ? (
+        elementeSrc = song[0].url,
+        elementSize = song[0].contentLength,
+        elementMim = 'audio/mp3'
+          ) : (
+        elementeSrc = videowithAudio[0].url,
+        elementSize = videowithAudio[0].contentLength,
+        elementMim = 'video/mp4'
+      );
 
-    this.storeData(this.state.obj);
+      this.setState({
+        obj: {
+          key: moment().locale('es-mx').format(),
+          title: itemInfo.videoDetails.title,
+          img: itemInfo.videoDetails.thumbnails[0].url,
+          date: moment().locale('es-mx').format('L, h:mm:ss a'),
+          src: elementeSrc,
+          type: xtype,
+          size: elementSize,
+          mime: elementMim,
+        },
+      });
+
+      this.storeData(this.state.obj);
+
+      } catch (e) {
+        console.log('Error >>' + e);
+      }
   }
 
   showAll_Items = async (video_id) => {
-    this.setState({portalMore: true, loadingInPortal: true});
+    this.setState({
+      portalMore: true,
+      loadingInPortal: true,
+      IDvid: video_id,
+    });
+
     const yt = 'http://www.youtube.com/watch?v=';
     const itemInfo = await ytdl.getInfo(yt + video_id);
-    console.log('INFO found!', itemInfo);
+    console.log('INFO found!+', itemInfo);
 
     let videowithAudio = ytdl.filterFormats(itemInfo.formats, 'audioandvideo');
-    console.log('audioandvideo: ', videowithAudio);
+    console.log('audioandvideo+: ', videowithAudio);
 
     let audioonly = ytdl.filterFormats(itemInfo.formats, 'audioonly');
-    //console.log('audioonly: ', audioonly);
+    console.log('audioonly+: ', audioonly);
 
     this.setState({
       videowithAudio: videowithAudio,
       audioonly: audioonly,
+      itemInfo: itemInfo,
       loadingInPortal: false,
     });
   }
@@ -245,7 +293,7 @@ class ListSongs extends Component {
                                 style={css.dialogBtnMP4}
                                 icon="play"
                                 mode="contained"
-                                onPress={() => this.showItem(item.id.videoId, 'mp4')}
+                                onPress={() => this.setEspecificItem(item, 'mp4')}
                                 labelStyle={css.dialogTxtBtn}>
                                 MP4
                               </Button>
@@ -264,7 +312,7 @@ class ListSongs extends Component {
                                 style={css.dialogBtnMP3}
                                 icon="music"
                                 mode="contained"
-                                onPress={() => this.showItem(item.id.videoId, 'mp3')}
+                                onPress={() => this.setEspecificItem(item, 'mp3')}
                                 labelStyle={css.dialogTxtBtn}>
                                 MP3
                                 </Button>

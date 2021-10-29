@@ -232,6 +232,9 @@ const css = StyleSheet.create({
     resizeMode: 'cover',
     alignSelf: 'center',
   },
+  labelOpen: {
+    fontSize: 9,
+  },
   titleListDownloads: {
     fontSize: 14,
     letterSpacing: -1,
@@ -243,9 +246,6 @@ const css = StyleSheet.create({
     letterSpacing: 2,
     //lineHeight: 15,
     color: appYellow,
-  },
-  progressSize: {
-    //width: 100,
   },
   descListDownloads: {
     fontSize: 10,
@@ -277,8 +277,19 @@ const css = StyleSheet.create({
     marginLeft: 8,
     marginRight: 20,
   },
-
-
+  //------------------------ SnackBar
+  snackStyle: {
+    margin: 5,
+    backgroundColor: appYellow,
+    width: windowWidth - 90,
+    opacity: 0.8,
+  },
+  txtSnack: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    color: 'black',
+  },
 
   //------------------------------------------
 
@@ -297,6 +308,11 @@ const css = StyleSheet.create({
     marginTop: 5,
     marginBottom: 10,
     height: 60,
+  },
+  centerBox: {
+    resizeMode: 'cover',
+    alignSelf: 'center',
+    alignSelf: 'center',
   },
 });
 

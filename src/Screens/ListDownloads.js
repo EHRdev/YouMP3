@@ -14,9 +14,15 @@ import {
   Button,
   ProgressBar,
   FAB,
+  Portal,
+  Dialog,
+  Divider,
+  Text,
+  Snackbar,
+  IconButton,
 } from 'react-native-paper';
 import ytdl from 'react-native-ytdl';
-import css from '../Styles/Styles';
+import css, { appYellow } from '../Styles/Styles';
 import 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Animatable from 'react-native-animatable';
@@ -25,6 +31,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 //---------------------------------------------------------------
 
 var typeError = ''; //----- Global
+const android = RNFetchBlob.android; // Android for OpenFile
 
 class ListDownloads extends Component {
   constructor(props) {
@@ -40,12 +47,21 @@ class ListDownloads extends Component {
       status: 'DESCARGANDO',
 
       pathForOpen: '',
+      elementListX: [],
+      dialogElement: false,
+
+      showSnack: false,
+      btnOpen: false,
+      progressColor: appYellow,
     };
   }
 
   componentDidMount(){
     this.getMultiple();
   }
+
+  hideShowMore = () => this.setState({dialogElement: false});
+  onDismissSnackBar = () => this.setState({showSnack: false});
 
   requestPermissions = async () => {
     try {
@@ -70,14 +86,46 @@ class ListDownloads extends Component {
     }
   };
 
+  openFile = () => {
+    let xpath = this.state.pathForOpen;
+      if (Platform.OS === 'ios') {
+        console.log('PRESS OPEN IOS');
+        RNFetchBlob.ios.openDocument(xpath);
+      }
+      if (Platform.OS === 'android') {
+        console.log('PRESS OPEN ANDROID');
+        this.state.isMP3 === true ? android.actionViewIntent(xpath, 'audio/webm') : android.actionViewIntent(xpath, 'video/mp4');
+      }
+   }
+
+   cancelDownload = () => {
+    this.setState({
+      isIndeterminate: false,
+      status: 'CANCELADA',
+      downloadProgress: 0,
+      progressColor: 'red',
+      //btnOpen: true,
+      //disabledClose: false,
+      showSnack: false,
+    });
+  }
+
   completedDownload = () => {
     this.setState({
       isIndeterminate: false,
-      status: 'Completado ✔️',
+      status: 'COMPLETADO',
       downloadProgress: 1,
-      //disabledPlay: false,
+      btnOpen: true,
+      progressColor: 'green',
       //disabledClose: false,
-      //showSnack: true,
+      showSnack: true,
+    });
+  }
+
+  viewListObj = (item) => {
+    this.setState({
+      elementListX: item,
+      dialogElement: true,
     });
   }
 
@@ -88,7 +136,8 @@ class ListDownloads extends Component {
 }
 
   downloadMachine = async () => {
-    let item = this.state.currentItem[0];
+    let itemLast = this.state.currentItem;
+    let item = itemLast[itemLast.length - 1];
     console.log('Mi Item Unico: ', item);
 
     //let item = this.state.currentItem.slice(item.length - 1).map((item) => item);
@@ -103,10 +152,6 @@ class ListDownloads extends Component {
 
     let filePath = `${dirToSave}/${filename}.${type}`;
     console.log(filePath, '<< File Path');
-
-    this.setState({
-      //
-    });
 
     Platform.OS === 'android' ? this.androidProcess() : null;
 
@@ -126,7 +171,7 @@ class ListDownloads extends Component {
             description: item.type,
             path: filePath,
             fileCache: true,
-            mime: item.type,
+            mime: item.mime,
             //mime: 'audio/webm',
           },
         },
@@ -144,7 +189,7 @@ class ListDownloads extends Component {
         })
         .catch((e) => {
           console.log('Error >>', e.message);
-          //typeError = e.message;
+          this.cancelDownload();
         });
   }
 
@@ -189,7 +234,7 @@ class ListDownloads extends Component {
 
   render() {
     console.log(this.state);
-    const { newObject, currentItem, downloadProgress, status, isIndeterminate } = this.state;
+    const { newObject, currentItem, downloadProgress, progressColor, status, isIndeterminate, dialogElement, elementListX, showSnack, btnOpen } = this.state;
 
     return (
       <Fragment>
@@ -198,31 +243,56 @@ class ListDownloads extends Component {
               <Fragment key={index}>
                 <View style={css.currentBox}>
                     <View style={css.currentBoxLeft}>
-                        <Image style={css.iconDownloadImg} source={{ uri: item.img }} />
+                        {btnOpen ? (
+                              <View style={css.iconDownloadImg}>
+                                <IconButton style={css.centerBox} icon="open-in-new" onPress={() => this.openFile()} color={appYellow} size={20}/>
+                                <Button labelStyle={css.labelOpen} mode="contained" onPress={() => this.openFile()} style={css.iconDownloadImg}>Abrir</Button>
+                              </View>
+                          ) : <Image style={css.iconDownloadImg} source={{ uri: item.img }} />
+                        }
                     </View>
                     <View style={css.currentBoxRight}>
                         <Title style={css.titleListDownloads} numberOfLines={1}>{item.title}</Title>
                         <Animatable.Text animation="pulse" style={css.statusStyle} iterationCount="infinite">{status}</Animatable.Text>
-                        <ProgressBar progress={downloadProgress} indeterminate={isIndeterminate} style={css.progressSize}/>
+                        <ProgressBar progress={downloadProgress} indeterminate={isIndeterminate} color={progressColor}/>
                     </View>
                 </View>
               </Fragment>
             ))}
-          {newObject.reverse().slice(1).map((item, index2) => (
-              <List.Item
-              key={index2}
-              title={item.title}
-              titleStyle={css.titleListDownloads}
-              description={'Descargado el ' + item.date + ' | ' + item.type + ' | ' + Math.round((item.size / 1000000) * 100 ) / 100 + 'Mb' }
-              descriptionStyle={css.descListDownloads}
-              style={css.listDownloads}
-              onPress={() => null}
-              left={props =>
-                <View style={css.iconDownload}>
-                  <Image style={css.iconDownloadImg} source={{ uri: item.img }} />
-                </View>
-              }/>
-          ))}
+          {newObject.slice(0, newObject.length - 1).reverse().map((item, index2) => (
+            <Fragment key={index2}>
+                <List.Item
+                title={item.title}
+                titleStyle={css.titleListDownloads}
+                description={'Descargado el ' + item.date + ' | ' + item.type + ' | ' + Math.round((item.size / 1000000) * 100 ) / 100 + 'Mb' }
+                descriptionStyle={css.descListDownloads}
+                style={css.listDownloads}
+                onPress={() => this.viewListObj(item)}
+                left={props =>
+                  <View style={css.iconDownload}>
+                    <Image style={css.iconDownloadImg} source={{ uri: item.img }} />
+                  </View>
+                }/>
+                {dialogElement ? (
+                  <Portal>
+                    <Dialog visible={true} onDismiss={this.hideShowMore}>
+                      <Dialog.Title style={css.dialogTitle}>{elementListX.title}</Dialog.Title>
+                      <Divider/>
+                      <Dialog.Content style={css.dialogContent}>
+                        <Title>{item.date}</Title>
+                        <Title>{item.type}</Title>
+                        <Title>{item.size}</Title>
+                      </Dialog.Content>
+                      <Dialog.Actions>
+                        <Button onPress={this.hideShowMore}>Salir</Button>
+                      </Dialog.Actions>
+                    </Dialog>
+                  </Portal>
+                    ) : null
+                }
+              </Fragment>
+            ))
+          }
         </ScrollView>
         <FAB
           style={css.fab}
@@ -230,6 +300,13 @@ class ListDownloads extends Component {
           icon="delete"
           onPress={() => this.removeFew()}
         />
+          <Snackbar
+            visible={showSnack}
+            onDismiss={this.onDismissSnackBar}
+            style={css.snackStyle}
+            action={{ label: 'Abrir', color: '#2A00FF', onPress: () => this.openFile() }}>
+              <Title style={css.txtSnack}>¡Descargado!</Title>
+          </Snackbar>
       </Fragment>
     );
   }
