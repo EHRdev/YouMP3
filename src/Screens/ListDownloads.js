@@ -14,10 +14,6 @@ import {
   Button,
   ProgressBar,
   FAB,
-  Portal,
-  Dialog,
-  Divider,
-  Text,
   Snackbar,
   IconButton,
 } from 'react-native-paper';
@@ -118,13 +114,6 @@ class ListDownloads extends Component {
       progressColor: 'green',
       //disabledClose: false,
       showSnack: true,
-    });
-  }
-
-  viewListObj = (item) => {
-    this.setState({
-      elementListX: item,
-      dialogElement: true,
     });
   }
 
@@ -233,7 +222,7 @@ class ListDownloads extends Component {
 
   render() {
     console.log(this.state);
-    const { newObject, currentItem, downloadProgress, progressColor, status, isIndeterminate, dialogElement, elementListX, showSnack, btnOpen } = this.state;
+    const { newObject, currentItem, downloadProgress, progressColor, status, isIndeterminate, showSnack, btnOpen } = this.state;
 
     return (
       <Fragment>
@@ -259,37 +248,19 @@ class ListDownloads extends Component {
               </Fragment>
             ))}
           {newObject.slice(0, newObject.length - 1).reverse().map((item, index2) => (
-            <Fragment key={index2}>
                 <List.Item
+                key={index2}
                 title={item.title}
                 titleStyle={css.titleListDownloads}
                 description={'Descargado el ' + item.date + ' | ' + item.type + ' | ' + Math.round((item.size / 1000000) * 100 ) / 100 + 'Mb' }
                 descriptionStyle={css.descListDownloads}
                 style={css.listDownloads}
-                onPress={() => this.viewListObj(item)}
+                //onPress={() => }
                 left={props =>
                   <View style={css.iconDownload}>
                     <Image style={css.iconDownloadImg} source={{ uri: item.img }} />
                   </View>
                 }/>
-                {dialogElement ? (
-                  <Portal>
-                    <Dialog visible={true} onDismiss={this.hideShowMore}>
-                      <Dialog.Title style={css.dialogTitle}>{elementListX.title}</Dialog.Title>
-                      <Divider/>
-                      <Dialog.Content style={css.dialogContent}>
-                        <Title>{item.date}</Title>
-                        <Title>{item.type}</Title>
-                        <Title>{item.size}</Title>
-                      </Dialog.Content>
-                      <Dialog.Actions>
-                        <Button onPress={this.hideShowMore}>Salir</Button>
-                      </Dialog.Actions>
-                    </Dialog>
-                  </Portal>
-                    ) : null
-                }
-              </Fragment>
             ))
           }
         </ScrollView>
