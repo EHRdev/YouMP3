@@ -312,7 +312,6 @@ const css = StyleSheet.create({
   centerBox: {
     resizeMode: 'cover',
     alignSelf: 'center',
-    alignSelf: 'center',
   },
 });
 

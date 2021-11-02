@@ -44,17 +44,13 @@ function App() {
         // title: 'App Name'
         options={{
           headerShown: false,
-          headerTitle: props => (
-            <Image
-              // eslint-disable-next-line react-native/no-inline-styles
-              style={{
-                width: 50,
-                resizeMode: 'contain',
-                alignSelf: 'center',
-              }}
-              /*source={require('../Media/Front_App_Logo.png')}*/
-            />
-          ),
+          headerStyle: {
+            backgroundColor: 'red',
+          },
+          headerTintColor: 'green',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
         }}
       />
       <Stack.Screen
