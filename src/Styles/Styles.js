@@ -27,7 +27,8 @@ const css = StyleSheet.create({
     textAlign: 'center',
   },
   boxIos: {
-    marginTop: 50,
+    //marginTop: 50,
+    marginTop: windowHeight / 7,
   },
   boxAndroid: {
     //
