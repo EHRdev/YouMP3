@@ -68,10 +68,9 @@ class ListDownloads extends Component {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         {
-          title: 'Permisos para Descargar',
+          title: 'Permisos de Descarga',
           message:
-            'Permite que se descarguen archivos en tu dispositivo.',
-          buttonNegative: 'Cancelar',
+            'Los permisos le permiten descargar música y videos de ésta App.',
           buttonPositive: 'Ok',
         }
       );
