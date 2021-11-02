@@ -24,13 +24,14 @@ function App() {
               backgroundColor: 'appDark',
               height: 100,
               elevation: 0,
-              shadowColor: 'transparent',
+              //shadowColor: 'transparent',
             },
+            headerTintColor: '#fff',
           },
           android: {
             headerStyle: {
               backgroundColor: appDark,
-              height: 70,
+              height: 65,
               elevation: 0,
               //shadowColor: 'transparent',
             },
