@@ -203,7 +203,8 @@ class ListDownloads extends Component {
         });
 
         //-----------------To DownLoad Machine
-        this.state.currentItem.length === 0 ? console.log('Sin Elementos para Descargar') : this.requestPermissions();
+        this.state.currentItem.length === 0 ? console.log('Sin Elementos para Descargar') : Platform.OS === 'android' ? this.requestPermissions() : this.downloadMachine();
+
       } catch (e) {
         // read error
       }
