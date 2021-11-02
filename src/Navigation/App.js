@@ -44,13 +44,6 @@ function App() {
         // title: 'App Name'
         options={{
           headerShown: false,
-          headerStyle: {
-            backgroundColor: 'red',
-          },
-          headerTintColor: 'green',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
         }}
       />
       <Stack.Screen
@@ -59,6 +52,10 @@ function App() {
         options={{
           title: 'Resultados',
           headerTintColor: '#fff',
+          headerStyle: {
+            backgroundColor: '#000',
+            height: 100,
+          },
         }}
       />
       <Stack.Screen
@@ -67,6 +64,10 @@ function App() {
         options={{
           title: 'Mis Descargas',
           headerTintColor: '#fff',
+          headerStyle: {
+            backgroundColor: '#000',
+            height: 100,
+          },
         }}
       />
     </Stack.Navigator>
