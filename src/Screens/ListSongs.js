@@ -4,6 +4,7 @@ import {
   View,
   ScrollView,
   Image,
+  Vibration,
 } from 'react-native';
 import {
   withTheme,
@@ -66,6 +67,10 @@ class ListSongs extends Component {
   }
 
   hideShowMore = () => this.setState({portalMore: false});
+
+  Zumb = () => {
+    Vibration.vibrate(800);
+  }
 
   _navigate = () => {
     this.setState({loading: false});
@@ -187,6 +192,8 @@ class ListSongs extends Component {
       itemInfo: itemInfo,
       loadingInPortal: false,
     });
+
+    this.Zumb();
   }
 
   searchMore = () => {
