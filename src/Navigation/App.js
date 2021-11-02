@@ -3,7 +3,7 @@ import 'react-native-gesture-handler'; // Navigation
 import * as React from 'react';
 import {Image, Platform} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {appDark} from '../Styles/Styles';
+import {appDark, appYellow} from '../Styles/Styles';
 import MainScreen from '../Screens/MainScreen';
 import ListSongs from '../Screens/ListSongs';
 import ListDownloads from '../Screens/ListDownloads';
@@ -26,7 +26,7 @@ function App() {
               elevation: 0,
               shadowColor: 'transparent',
             },
-            headerTintColor: 'gold',
+            headerTintColor: appYellow,
           },
           android: {
             headerStyle: {
