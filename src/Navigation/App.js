@@ -21,12 +21,12 @@ function App() {
           // Personalizador de Dispositivo
           ios: {
             headerStyle: {
-              backgroundColor: 'appDark',
-              height: 100,
+              backgroundColor: appDark,
+              height: 110,
               elevation: 0,
-              //shadowColor: 'transparent',
+              shadowColor: 'transparent',
             },
-            headerTintColor: '#fff',
+            headerTintColor: 'gold',
           },
           android: {
             headerStyle: {
