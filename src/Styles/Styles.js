@@ -33,7 +33,7 @@ const css = StyleSheet.create({
     alignSelf: 'center',
   },
   inputCustom: {
-    height: 80,
+    height: 79,
     fontSize: 16,
   },
   actionsCustom: {

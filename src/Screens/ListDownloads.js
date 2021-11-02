@@ -15,7 +15,6 @@ import {
   ProgressBar,
   FAB,
   Snackbar,
-  IconButton,
 } from 'react-native-paper';
 import ytdl from 'react-native-ytdl';
 import css, { appYellow } from '../Styles/Styles';
@@ -42,13 +41,11 @@ class ListDownloads extends Component {
       downloadProgress: '',
       status: 'DESCARGANDO',
 
-      pathForOpen: '',
-      elementListX: [],
-      dialogElement: false,
-
       showSnack: false,
-      btnOpen: false,
       progressColor: appYellow,
+
+      filePath: '',
+      dialogDetails: false,
     };
   }
 
@@ -58,6 +55,9 @@ class ListDownloads extends Component {
 
   hideShowMore = () => this.setState({dialogElement: false});
   onDismissSnackBar = () => this.setState({showSnack: false});
+  hideDialog = () => this.setState({dialogDetails: false});
+
+  showDetailInfo = () => this.setState({dialogDetails: true});
 
   requestPermissions = async () => {
     try {
@@ -81,25 +81,12 @@ class ListDownloads extends Component {
     }
   };
 
-  openFile = () => {
-    let xpath = this.state.pathForOpen;
-      if (Platform.OS === 'ios') {
-        console.log('PRESS OPEN IOS');
-        RNFetchBlob.ios.openDocument(xpath);
-      }
-      if (Platform.OS === 'android') {
-        console.log('PRESS OPEN ANDROID');
-        this.state.isMP3 === true ? android.actionViewIntent(xpath, 'audio/webm') : android.actionViewIntent(xpath, 'video/mp4');
-      }
-   }
-
    cancelDownload = () => {
     this.setState({
       isIndeterminate: false,
       status: 'CANCELADA',
       downloadProgress: 0,
       progressColor: 'red',
-      //btnOpen: true,
       //disabledClose: false,
       showSnack: false,
     });
@@ -110,7 +97,6 @@ class ListDownloads extends Component {
       isIndeterminate: false,
       status: 'COMPLETADO',
       downloadProgress: 1,
-      btnOpen: true,
       progressColor: 'green',
       //disabledClose: false,
       showSnack: true,
@@ -141,6 +127,8 @@ class ListDownloads extends Component {
     let filePath = `${dirToSave}/${filename}.${type}`;
     console.log(filePath, '<< File Path');
 
+    this.setState({ filePath: filePath });
+
     Platform.OS === 'android' ? this.androidProcess() : null;
 
     RNFetchBlob.config(
@@ -170,10 +158,16 @@ class ListDownloads extends Component {
         this.setState({downloadProgress: received / total});
       })
       .then(resp => {
-          console.log('Response: ', resp);
-          this.setState({pathForOpen: resp.path()});
+          console.log('Full Response: ', resp);
           this.completedDownload();
           console.log('The file saved to', resp.path());
+          Platform.OS === 'android' ? (
+            console.log('PRESS OPEN ANDROID'),
+            android.actionViewIntent(resp.path(), item.mime)
+          ) : (
+            console.log('PRESS OPEN IOS'),
+            RNFetchBlob.ios.openDocument(resp.path())
+          );
         })
         .catch((e) => {
           console.log('Error >>', e.message);
@@ -223,7 +217,7 @@ class ListDownloads extends Component {
 
   render() {
     console.log(this.state);
-    const { newObject, currentItem, downloadProgress, progressColor, status, isIndeterminate, showSnack, btnOpen } = this.state;
+    const { newObject, currentItem, downloadProgress, progressColor, status, isIndeterminate, showSnack, filePath, dialogDetails } = this.state;
 
     return (
       <Fragment>
@@ -232,13 +226,7 @@ class ListDownloads extends Component {
               <Fragment key={index}>
                 <View style={css.currentBox}>
                     <View style={css.currentBoxLeft}>
-                        {btnOpen ? (
-                              <View style={css.iconDownloadImg}>
-                                <IconButton style={css.centerBox} icon="open-in-new" onPress={() => this.openFile()} color={appYellow} size={20}/>
-                                <Button labelStyle={css.labelOpen} mode="contained" onPress={() => this.openFile()} style={css.iconDownloadImg}>Abrir</Button>
-                              </View>
-                          ) : <Image style={css.iconDownloadImg} source={{ uri: item.img }} />
-                        }
+                      <Image style={css.iconDownloadImg} source={{ uri: item.img }} />
                     </View>
                     <View style={css.currentBoxRight}>
                         <Title style={css.titleListDownloads} numberOfLines={1}>{item.title}</Title>
@@ -249,14 +237,14 @@ class ListDownloads extends Component {
               </Fragment>
             ))}
           {newObject.slice(0, newObject.length - 1).reverse().map((item, index2) => (
-                <List.Item
+              <List.Item
                 key={index2}
                 title={item.title}
                 titleStyle={css.titleListDownloads}
                 description={'Descargado el ' + item.date + ' | ' + item.type + ' | ' + Math.round((item.size / 1000000) * 100 ) / 100 + 'Mb' }
                 descriptionStyle={css.descListDownloads}
                 style={css.listDownloads}
-                //onPress={() => }
+                onPress={() => this.showDetailInfo()}
                 left={props =>
                   <View style={css.iconDownload}>
                     <Image style={css.iconDownloadImg} source={{ uri: item.img }} />
@@ -274,9 +262,8 @@ class ListDownloads extends Component {
           <Snackbar
             visible={showSnack}
             onDismiss={this.onDismissSnackBar}
-            style={css.snackStyle}
-            action={{ label: 'Abrir', color: '#2A00FF', onPress: () => this.openFile() }}>
-              <Title style={css.txtSnack}>¡Descargado!</Title>
+            style={css.snackStyle}>
+              <Title style={css.txtSnack}>¡Archivo Descargado!</Title>
           </Snackbar>
       </Fragment>
     );

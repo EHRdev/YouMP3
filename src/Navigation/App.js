@@ -29,11 +29,12 @@ function App() {
           },
           android: {
             headerStyle: {
-              backgroundColor: 'appDark',
-              height: 60,
+              backgroundColor: appDark,
+              height: 70,
               elevation: 0,
-              shadowColor: 'transparent',
+              //shadowColor: 'transparent',
             },
+            headerTintColor: '#fff',
           },
         }),
         cardStyle: {backgroundColor: appDark},
@@ -51,11 +52,6 @@ function App() {
         component={ListSongs}
         options={{
           title: 'Resultados',
-          headerTintColor: '#fff',
-          headerStyle: {
-            backgroundColor: '#000',
-            height: 100,
-          },
         }}
       />
       <Stack.Screen
@@ -63,11 +59,6 @@ function App() {
         component={ListDownloads}
         options={{
           title: 'Mis Descargas',
-          headerTintColor: '#fff',
-          headerStyle: {
-            backgroundColor: '#000',
-            height: 100,
-          },
         }}
       />
     </Stack.Navigator>
