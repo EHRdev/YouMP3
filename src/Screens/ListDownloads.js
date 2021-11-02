@@ -263,7 +263,7 @@ class ListDownloads extends Component {
             visible={showSnack}
             onDismiss={this.onDismissSnackBar}
             style={css.snackStyle}>
-              <Title style={css.txtSnack}>¡Archivo Descargado!</Title>
+              <Title style={css.txtSnack}>¡Archivo Descargado! 🔥</Title>
           </Snackbar>
       </Fragment>
     );
