@@ -26,6 +26,12 @@ const css = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
   },
+  boxIos: {
+    marginTop: 50,
+  },
+  boxAndroid: {
+    //
+  },
   frontLogo: {
     width: 350,
     height: 230,

@@ -103,7 +103,9 @@ class MainScreen extends Component {
     return (
       <View style={css.container}>
           <StatusBar backgroundColor={appDark} />
-            <Image style={css.frontLogo} source={require('../Media/Front_App_Logo.png')} />
+            <View style={Platform.OS === 'ios' ? (css.boxIos) : (css.boxAndroid)}>
+              <Image style={css.frontLogo} source={require('../Media/Front_App_Logo.png')} />
+            </View>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? ('padding"') : ('height')} keyboardVerticalOffset={-100}>
               <TextInput
                 style={css.inputCustom}
