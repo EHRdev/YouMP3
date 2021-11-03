@@ -39,14 +39,13 @@ YouMP3 es una aplicación móvil híbrida construida con [React Native](https://
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/40396000/140002017-1f45760e-3f8a-4ff4-9714-5576ac590150.png">
-  <img src="https://user-images.githubusercontent.com/40396000/140002018-4e19d20f-4936-405a-aed9-bf0648c90414.png">
   <img src="https://user-images.githubusercontent.com/40396000/140002019-08b3e15d-ef7a-4613-b9ef-f83e8dc445b6.png">
   <img src="https://user-images.githubusercontent.com/40396000/140002020-d70a2909-7b19-46dc-878c-34b028eb3d04.png">
   <img src="https://user-images.githubusercontent.com/40396000/140002021-29390770-9d23-475a-9a57-2056183197b9.png">
   <img src="https://user-images.githubusercontent.com/40396000/140002022-fd6c5383-4b55-424f-a209-81a8aa261acf.png">
   <img src="https://user-images.githubusercontent.com/40396000/140002023-45e605c3-3e6c-4861-85a5-0000bcf062bc.png">
-  <img src="https://user-images.githubusercontent.com/40396000/140002024-452de740-3cbb-437f-9743-ab9e12483eb6.png">
   <img src="https://user-images.githubusercontent.com/40396000/140002027-acae2ebb-0586-46b4-b07b-6477688cda75.png">
+  <img src="https://user-images.githubusercontent.com/40396000/140002024-452de740-3cbb-437f-9743-ab9e12483eb6.png">
 </p>
 
 <!-- Screens iOs -->
