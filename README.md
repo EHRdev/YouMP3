@@ -37,7 +37,7 @@ YouMP3 es una aplicación móvil híbrida construida con [React Native](https://
 
 ## Demo Android
 
-<p align="center
+<p align="center">
   <img src="https://user-images.githubusercontent.com/40396000/140002017-1f45760e-3f8a-4ff4-9714-5576ac590150.png">
   <img src="https://user-images.githubusercontent.com/40396000/140002018-4e19d20f-4936-405a-aed9-bf0648c90414.png">
   <img src="https://user-images.githubusercontent.com/40396000/140002019-08b3e15d-ef7a-4613-b9ef-f83e8dc445b6.png">
