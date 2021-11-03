@@ -191,9 +191,14 @@ class ListDownloads extends Component {
 
         console.log('xvalues: ', xvalues);
 
+        let zvalues = xvalues.sort(function(a,b){
+          return new Date(a.key) - new Date(b.key)
+        })
+        console.log('zvalues: ', zvalues);
+
         this.setState({
-          newObject: xvalues,
-          currentItem: xvalues,
+          newObject: zvalues,
+          currentItem: zvalues,
         });
 
         //-----------------To DownLoad Machine

@@ -13,7 +13,6 @@
 		B715354731205D3AE0CAC783 /* libPods-Doppler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40535FDC6FB6241969B746DC /* libPods-Doppler.a */; };
 		E5CDF8AA12F45FE58B30A059 /* libPods-Doppler-DopplerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C4D0256E4ECEB5E347F5EE1 /* libPods-Doppler-DopplerTests.a */; };
 		EFE8A9E62731894C002B5538 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		EFE8A9E727318956002B5538 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB61A68108700A75B9A /* Info.plist */; };
 		EFE8A9E82731895B002B5538 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -282,7 +281,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFE8A9E82731895B002B5538 /* LaunchScreen.storyboard in Resources */,
-				EFE8A9E727318956002B5538 /* Info.plist in Resources */,
 				EFE8A9E62731894C002B5538 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -488,7 +486,7 @@
 			baseConfigurationReference = D58318316321002261219894 /* Pods-Doppler.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 72DXXKQD8S;
@@ -517,7 +515,7 @@
 			baseConfigurationReference = 3504691B60DFD96A3E954701 /* Pods-Doppler.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 72DXXKQD8S;
