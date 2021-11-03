@@ -192,8 +192,8 @@ class ListDownloads extends Component {
         console.log('xvalues: ', xvalues);
 
         let zvalues = xvalues.sort(function(a,b){
-          return new Date(a.key) - new Date(b.key)
-        })
+          return new Date(a.key) - new Date(b.key);
+        });
         console.log('zvalues: ', zvalues);
 
         this.setState({
