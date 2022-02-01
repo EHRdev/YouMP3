@@ -94,7 +94,7 @@ class ListSongs extends Component {
   };
 
   setEspecificItem = (item, xtype) => {
-    console.log('mi item en setEspecificItem', item);
+    console.log('mi item: ', item);
     let { itemInfo } = this.state;
 
     let elementMim;
@@ -189,9 +189,13 @@ class ListSongs extends Component {
     let audioonly = ytdl.filterFormats(itemInfo.formats, 'audioonly');
     console.log('audioonly+: ', audioonly);
 
+    let song = audioonly.filter(audio => audio.container === 'mp4').map((audio) => audio);
+    console.log('song+: ', song);
+
     this.setState({
       videowithAudio: videowithAudio,
       audioonly: audioonly,
+      song: song,
       itemInfo: itemInfo,
       loadingInPortal: false,
     });
@@ -222,7 +226,7 @@ class ListSongs extends Component {
 
   render() {
     console.log(this.state);
-    const { songList, btnLoadMore, loading, moreFormats, portalMore, loadingInPortal, videowithAudio, audioonly} = this.state;
+    const { songList, btnLoadMore, loading, moreFormats, portalMore, loadingInPortal, videowithAudio, audioonly, song} = this.state;
     //const { songList, tokenNext } = this.props.route.params;
 
     return (
@@ -258,7 +262,6 @@ class ListSongs extends Component {
                         labelStyle={css.labelBtnFormat}>
                         MP3
                       </Button>
-                      {Platform.OS === 'android' ? (
                         <Button
                           style={css.btnMore}
                           mode="contained"
@@ -266,7 +269,6 @@ class ListSongs extends Component {
                           labelStyle={css.labelBtnMore}>
                             +
                         </Button>
-                      ) : null }
                   </View>
               </List.Accordion>
            ))}
@@ -318,26 +320,48 @@ class ListSongs extends Component {
                               </Surface>
                             </View>
                           ))}
-                          {audioonly.map((item, index) => (
-                            <View key={index} style={css.dialogRaw}>
-                              <Button
-                                style={css.dialogBtnMP3}
-                                icon="music"
-                                mode="contained"
-                                onPress={() => this.setEspecificItem(item, 'mp3')}
-                                labelStyle={css.dialogTxtBtn}>
-                                MP3
-                                </Button>
-                              <Surface style={css.surfaceBoxCross}>
-                                <Text style={css.surfaceNum}>{item.audioBitrate}</Text>
-                                <Text style={css.surfaceTxt}>{'Kbps'}</Text>
-                              </Surface>
-                              <Surface style={css.surfaceBox}>
-                                <Text style={css.surfaceNum2}>{Math.round((item.contentLength / 1000000) * 10) / 10}</Text>
-                                <Text style={css.surfaceSub}>Mb</Text>
-                              </Surface>
-                            </View>
-                          ))}
+                          {Platform.OS === 'android' ? (
+                            audioonly.map((item, index) => (
+                              <View key={index} style={css.dialogRaw}>
+                                <Button
+                                  style={css.dialogBtnMP3}
+                                  icon="music"
+                                  mode="contained"
+                                  onPress={() => this.setEspecificItem(item, 'mp3')}
+                                  labelStyle={css.dialogTxtBtn}>
+                                  MP3
+                                  </Button>
+                                <Surface style={css.surfaceBoxCross}>
+                                  <Text style={css.surfaceNum}>{item.audioBitrate}</Text>
+                                  <Text style={css.surfaceTxt}>{'Kbps'}</Text>
+                                </Surface>
+                                <Surface style={css.surfaceBox}>
+                                  <Text style={css.surfaceNum2}>{Math.round((item.contentLength / 1000000) * 10) / 10}</Text>
+                                  <Text style={css.surfaceSub}>Mb</Text>
+                                </Surface>
+                              </View>
+                            ))
+                          ) : (
+                            <View style={css.dialogRaw}>
+                                <Button
+                                  style={css.dialogBtnMP3}
+                                  icon="music"
+                                  mode="contained"
+                                  onPress={() => this.setEspecificItem(song[0], 'mp3')}
+                                  labelStyle={css.dialogTxtBtn}>
+                                  MP3
+                                  </Button>
+                                <Surface style={css.surfaceBoxCross}>
+                                  <Text style={css.surfaceNum}>{song[0].audioBitrate}</Text>
+                                  <Text style={css.surfaceTxt}>{'Kbps'}</Text>
+                                </Surface>
+                                <Surface style={css.surfaceBox}>
+                                  <Text style={css.surfaceNum2}>{Math.round((song[0].contentLength / 1000000) * 10) / 10}</Text>
+                                  <Text style={css.surfaceSub}>Mb</Text>
+                                </Surface>
+                              </View>
+                          )
+                        }
                       </View>
                     )
                   }
