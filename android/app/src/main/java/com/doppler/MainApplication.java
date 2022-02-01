@@ -1,4 +1,4 @@
-package com.doppler;
+package com.yoump3pro;
 
 import android.app.Application;
 import android.content.Context;

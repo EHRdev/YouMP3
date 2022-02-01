@@ -1,4 +1,4 @@
-package com.doppler;
+package com.yoump3pro;
 
 import com.facebook.react.ReactActivity;
 
