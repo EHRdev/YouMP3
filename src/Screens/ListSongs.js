@@ -5,6 +5,7 @@ import {
   ScrollView,
   Image,
   Vibration,
+  Platform,
 } from 'react-native';
 import {
   withTheme,
@@ -131,10 +132,12 @@ class ListSongs extends Component {
       console.log('INFO found!', itemInfo);
 
       let audioonly = ytdl.filterFormats(itemInfo.formats, 'audioonly');
-      let song = audioonly.filter(audio => audio.audioBitrate === 64).map((audio) => audio);
+      let song = audioonly.filter(audio => audio.container === 'mp4').map((audio) => audio);
 
       let videowithAudio = ytdl.filterFormats(itemInfo.formats, 'audioandvideo');
-      console.log('audioandvideo: ', videowithAudio + 'audioonly: ', audioonly + 'song: ', song);
+      console.log('audioandvideo: ', videowithAudio);
+      console.log('audioonly: ', audioonly);
+      console.log('song: ', song);
 
       let elementeSrc;
       let elementSize;
@@ -142,7 +145,7 @@ class ListSongs extends Component {
       xtype === 'mp3' ? (
         elementeSrc = song[0].url,
         elementSize = song[0].contentLength,
-        elementMim = 'audio/mp3'
+        elementMim = 'audio/mp4'
           ) : (
         elementeSrc = videowithAudio[0].url,
         elementSize = videowithAudio[0].contentLength,
@@ -255,13 +258,15 @@ class ListSongs extends Component {
                         labelStyle={css.labelBtnFormat}>
                         MP3
                       </Button>
-                      <Button
-                        style={css.btnMore}
-                        mode="contained"
-                        onPress={() => this.showAll_Items(item.id.videoId)}
-                        labelStyle={css.labelBtnMore}>
-                          +
-                      </Button>
+                      {Platform.OS === 'android' ? (
+                        <Button
+                          style={css.btnMore}
+                          mode="contained"
+                          onPress={() => this.showAll_Items(item.id.videoId)}
+                          labelStyle={css.labelBtnMore}>
+                            +
+                        </Button>
+                      ) : null }
                   </View>
               </List.Accordion>
            ))}
