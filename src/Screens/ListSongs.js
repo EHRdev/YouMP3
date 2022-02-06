@@ -246,29 +246,29 @@ class ListSongs extends Component {
                   }
                 >
                   <View style={css.selectFormat}>
-                      <Button
-                        style={css.btnMp4}
-                        icon="play"
-                        mode="contained"
-                        onPress={() => this.showItem(item.id.videoId, 'mp4')}
-                        labelStyle={css.labelBtnFormat}>
-                        MP4
-                      </Button>
-                      <Button
-                        style={css.btnMp3}
-                        icon="music"
-                        mode="contained"
-                        onPress={() => this.showItem(item.id.videoId, 'mp3')}
-                        labelStyle={css.labelBtnFormat}>
-                        MP3
-                      </Button>
-                        <Button
-                          style={css.btnMore}
-                          mode="contained"
-                          onPress={() => this.showAll_Items(item.id.videoId)}
-                          labelStyle={css.labelBtnMore}>
-                            +
-                        </Button>
+                    <Button
+                      style={css.btnMp4}
+                      icon="play"
+                      mode="contained"
+                      onPress={() => this.showItem(item.id.videoId, 'mp4')}
+                      labelStyle={css.labelBtnFormat}>
+                      MP4
+                    </Button>
+                    <Button
+                      style={css.btnMp3}
+                      icon="music"
+                      mode="contained"
+                      onPress={() => this.showItem(item.id.videoId, 'mp3')}
+                      labelStyle={css.labelBtnFormat}>
+                      MP3
+                    </Button>
+                    <Button
+                      style={css.btnMore}
+                      mode="contained"
+                      onPress={() => this.showAll_Items(item.id.videoId)}
+                      labelStyle={css.labelBtnMore}>
+                        +
+                    </Button>
                   </View>
               </List.Accordion>
            ))}
