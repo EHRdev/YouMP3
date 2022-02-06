@@ -18,20 +18,21 @@
   <a href="https://reactnative.dev/">
     <img src="https://img.shields.io/badge/app-iOS-purple?style=for-the-badge&logo=apple">
   </a>
-  <a href="https://play.google.com/store/apps/details?id=com.youDownloader&hl=es_MX">
+  <a href="https://play.google.com/store/apps/details?id=com.yoump3pro">
     <img src="https://img.shields.io/badge/publicada%20en-Google%20play-%23ec3a3b?style=for-the-badge&logo=google%20play">
   </a>
 </p>
 
 <!-- Text -->
-YouMP3 es una aplicación móvil híbrida construida con [React Native](https://reactnative.dev/), la app te permite descargar música en formato MP3 directo al almacenamiento del dispositivo, cuenta con herramientas adicionales como formatos comprimidos, formato de video e historial de descargas. A nivel técnico xxxxxxxx ❤️
+YouMP3 es una aplicación móvil construida con [React Native](https://reactnative.dev/), disponible en Android & iOS, la app te permite descargar música en formato MP3 directo al almacenamiento del dispositivo, cuenta con herramientas adicionales como formatos comprimidos, historial de descargas y formato de video. ❤️
 
-## 🛍️ Descargar desde la Play Store [aquí](https://play.google.com/store/apps/details?id=com.youMP3&hl=es_MX)
+## 🛍️ Descargar desde la Play Store [aquí](https://play.google.com/store/apps/details?id=com.yoump3pro)
 
 ## 🌟 Funcionalidades
 
 - Descarga música en formato MP3 🎵
 - Descarga videos de YouTube en formato MP4 ⚡
+- Historial de Descargas
 
 <!-- Screens Android -->
 
@@ -68,7 +69,7 @@ YouMP3 es una aplicación móvil híbrida construida con [React Native](https://
 Estas instrucciones le proporcionarán una copia del proyecto en funcionamiento en su máquina con fines de desarrollo y pruebas.
 
 1. Instalar [NodeJs](https://nodejs.org/en/)
-2. Clona el repositorio en tu máquina
+1. Clona el repositorio en tu PC
 
     ```
     git clone https://github.com/EHRdev/YouDownloader.git
