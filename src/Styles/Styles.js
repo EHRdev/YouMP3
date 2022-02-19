@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import {StyleSheet} from 'react-native';
-import {blue100} from 'react-native-paper/lib/typescript/styles/colors';
 import { Dimensions } from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
@@ -12,11 +11,11 @@ export const appLightRed = '#EC4848';
 export const appDark = '#121212';
 export const appYellow = '#ffd900';
 
-//------------------------ General Colors
-
+//---------- General Colors ------------|
 export const colorSpinner = '#B32525';
 export const colorSelection = '#414141';
 export const basicYellow = 'yellow';
+//--------------------------------------|
 
 const css = StyleSheet.create({
   //------------------------ Music Screen
@@ -114,7 +113,7 @@ const css = StyleSheet.create({
     width: 100,
     height: 50,
     margin: 5,
-    backgroundColor: '#E8E8E8', // Botón gris
+    backgroundColor: '#E8E8E8', //Button Gray
   },
   btnMore: {
     justifyContent: 'center',
@@ -122,7 +121,7 @@ const css = StyleSheet.create({
     width: 50,
     height: 50,
     margin: 5,
-    backgroundColor: '#6FECB7', // Botón verde
+    backgroundColor: '#6FECB7', //Button Green
   },
   searchMore: {
     justifyContent: 'center',
@@ -165,7 +164,7 @@ const css = StyleSheet.create({
     width: 150,
     height: 50,
     margin: 5,
-    backgroundColor: '#E8E8E8', // Botón gris
+    backgroundColor: '#E8E8E8', //Button Gray
   },
   dialogTxtBtn: {
     fontSize: 16,
@@ -277,13 +276,14 @@ const css = StyleSheet.create({
     overflow: 'hidden',
   },
   currentBoxRight: {
-    width: '80%', // Checar en iOS
+    width: '80%', // iOS
     alignSelf: 'stretch',
     flexDirection: 'column',
     justifyContent: 'center',
     marginLeft: 8,
     marginRight: 20,
   },
+
   //------------------------ SnackBar
   snackStyle: {
     margin: 5,
@@ -297,9 +297,6 @@ const css = StyleSheet.create({
     letterSpacing: 2,
     color: 'black',
   },
-
-  //------------------------------------------
-
   txtLoader: {
     fontSize: 12,
     textAlign: 'center',
@@ -307,8 +304,6 @@ const css = StyleSheet.create({
     margin: 5,
     letterSpacing: 2,
   },
-
-
 
   //------------------------ News, Uncategorized
   scroll: {

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   View,
   ScrollView,
@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {
   withTheme,
-  Title,
   List,
   Button,
   ActivityIndicator,
@@ -27,31 +26,21 @@ import moment from 'moment';
 import 'moment/locale/es-mx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-//---------------------------------------------------------------
-
-var globalType = '';
-
 class ListSongs extends Component {
   constructor(props) {
     super(props);
     this.state = {
       keywordTxt: '',
       btnLoadMore: true,
-
       songList: this.props.route.params.songList,
       tokenNext: this.props.route.params.tokenNext,
-
       globalType: '',
-
       showBtn: false,
       loading: false,
-
       moreFormats: false,
       portalMore: false,
       loadingInPortal: false,
-
       IDvid: '',
-
       obj: [
         {
           key: '',
@@ -67,29 +56,24 @@ class ListSongs extends Component {
     };
   }
 
-  hideShowMore = () => this.setState({portalMore: false});
-
-  Zumb = () => {
-    Vibration.vibrate(800);
-  }
+  hideShowMore = () => this.setState({ portalMore: false });
+  Zumb = () => Vibration.vibrate(800);
 
   _navigate = () => {
-    this.setState({loading: false});
+    this.setState({ loading: false });
     this.props.navigation.navigate('ListDownloads');
   }
 
   storeData = async (value) => {
     try {
-      //Guardar Objeto
+      //Save Obj
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem(value.key, jsonValue);
-      console.log('Key: ' + value.key);
-      console.log('Se guardo el valor en la Store');
-
+      //console.log('Key: ' + value.key);
+      //console.log('Key Saved in Store');
       this._navigate();
-
     } catch (e) {
-      console.log('Error al guardar: ', e);
+      console.log('Error Saved: ', e);
     }
   };
 
@@ -99,45 +83,45 @@ class ListSongs extends Component {
 
     let elementMim;
     xtype === 'mp3' ? (
-        elementMim = 'audio/mp3'
-          ) : (
-        elementMim = 'video/mp4'
-      );
+      elementMim = 'audio/mp3'
+    ) : (
+      elementMim = 'video/mp4'
+    );
 
-      let myObj = {
-            key: moment().locale('es-mx').format(),
-            title: itemInfo.videoDetails.title,
-            img: itemInfo.videoDetails.thumbnails[0].url,
-            date: moment().locale('es-mx').format('L, h:mm:ss a'),
-            src: item.url,
-            type: xtype,
-            size: item.contentLength,
-            mime: elementMim,
-          };
+    let myObj = {
+      key: moment().locale('es-mx').format(),
+      title: itemInfo.videoDetails.title,
+      img: itemInfo.videoDetails.thumbnails[0].url,
+      date: moment().locale('es-mx').format('L, h:mm:ss a'),
+      src: item.url,
+      type: xtype,
+      size: item.contentLength,
+      mime: elementMim,
+    };
 
-      this.setState({
-        obj: myObj,
-        portalMore: false,
-      });
+    this.setState({
+      obj: myObj,
+      portalMore: false,
+    });
 
-      this.storeData(myObj);
+    this.storeData(myObj);
   }
 
   showItem = async (video_id, xtype) => {
-    this.setState({showBtn: true, loading: true});
+    this.setState({ showBtn: true, loading: true });
     const yt = 'http://www.youtube.com/watch?v=';
 
     try {
       const itemInfo = await ytdl.getInfo(yt + video_id);
-      console.log('INFO found!', itemInfo);
+      //console.log('INFO found!', itemInfo);
 
       let audioonly = ytdl.filterFormats(itemInfo.formats, 'audioonly');
       let song = audioonly.filter(audio => audio.container === 'mp4').map((audio) => audio);
 
       let videowithAudio = ytdl.filterFormats(itemInfo.formats, 'audioandvideo');
-      console.log('audioandvideo: ', videowithAudio);
-      console.log('audioonly: ', audioonly);
-      console.log('song: ', song);
+      //console.log('audioandvideo: ', videowithAudio);
+      //console.log('audioonly: ', audioonly);
+      //console.log('song: ', song);
 
       let elementeSrc;
       let elementSize;
@@ -146,7 +130,7 @@ class ListSongs extends Component {
         elementeSrc = song[0].url,
         elementSize = song[0].contentLength,
         elementMim = 'audio/mp4'
-          ) : (
+      ) : (
         elementeSrc = videowithAudio[0].url,
         elementSize = videowithAudio[0].contentLength,
         elementMim = 'video/mp4'
@@ -167,9 +151,9 @@ class ListSongs extends Component {
 
       this.storeData(this.state.obj);
 
-      } catch (e) {
-        console.log('Error >>' + e);
-      }
+    } catch (e) {
+      console.log('Error >>' + e);
+    }
   }
 
   showAll_Items = async (video_id) => {
@@ -204,16 +188,16 @@ class ListSongs extends Component {
   }
 
   searchMore = () => {
-    const  apiKey = 'AIzaSyBxJAdyyhLejOIbWLQinq7grj9KfSw-qmQ';  //Llave
-    const  keyWord = this.state.keywordTxt;
+    const apiKey = 'AIzaSyBxJAdyyhLejOIbWLQinq7grj9KfSw-qmQ';  //Llave
+    const keyWord = this.state.keywordTxt;
 
-    const  songList = this.state.songList;
-    const  tokenNext = this.state.tokenNext;
+    const songList = this.state.songList;
+    const tokenNext = this.state.tokenNext;
 
     fetch('https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&pageToken=' + tokenNext + '&q=' + keyWord + '&key=' + apiKey)
       .then(response => response.json())
       .then((response) => {
-        console.log('mis resultados con token: ', response);
+        //console.log('response with token: ', response);
         this.setState({
           songList: [].concat(songList, response.items),
           btnLoadMore: false,
@@ -225,155 +209,155 @@ class ListSongs extends Component {
   }
 
   render() {
-    console.log(this.state);
-    const { songList, btnLoadMore, loading, moreFormats, portalMore, loadingInPortal, videowithAudio, audioonly, song} = this.state;
+    //console.log(this.state);
+    const { songList, btnLoadMore, loading, portalMore, loadingInPortal, videowithAudio, audioonly, song } = this.state;
     //const { songList, tokenNext } = this.props.route.params;
 
     return (
       <Fragment>
         <ScrollView style={css.listElements}>
           {songList.map((item, index) => (
-              <List.Accordion
-                  key={index}
-                  title={item.snippet.title}
-                  titleStyle={css.titleList}
-                  titleNumberOfLines={2}
-                  //item.id.videoId
-                  left={props =>
-                    <View style={css.iconElementBox}>
-                      <Image style={css.iconElementImg} source={{ uri: item.snippet.thumbnails.medium.url }} />
-                    </View>
-                  }
-                >
-                  <View style={css.selectFormat}>
-                    <Button
-                      style={css.btnMp4}
-                      icon="play"
-                      mode="contained"
-                      onPress={() => this.showItem(item.id.videoId, 'mp4')}
-                      labelStyle={css.labelBtnFormat}>
-                      MP4
-                    </Button>
-                    <Button
-                      style={css.btnMp3}
-                      icon="music"
-                      mode="contained"
-                      onPress={() => this.showItem(item.id.videoId, 'mp3')}
-                      labelStyle={css.labelBtnFormat}>
-                      MP3
-                    </Button>
-                    <Button
-                      style={css.btnMore}
-                      mode="contained"
-                      onPress={() => this.showAll_Items(item.id.videoId)}
-                      labelStyle={css.labelBtnMore}>
-                        +
-                    </Button>
-                  </View>
-              </List.Accordion>
-           ))}
-           {btnLoadMore ?
-              <Button
+            <List.Accordion
+              key={index}
+              title={item.snippet.title}
+              titleStyle={css.titleList}
+              titleNumberOfLines={2}
+              //item.id.videoId
+              left={props =>
+                <View style={css.iconElementBox}>
+                  <Image style={css.iconElementImg} source={{ uri: item.snippet.thumbnails.medium.url }} />
+                </View>
+              }
+            >
+              <View style={css.selectFormat}>
+                <Button
+                  style={css.btnMp4}
+                  icon="play"
+                  mode="contained"
+                  onPress={() => this.showItem(item.id.videoId, 'mp4')}
+                  labelStyle={css.labelBtnFormat}>
+                  MP4
+                </Button>
+                <Button
+                  style={css.btnMp3}
+                  icon="music"
+                  mode="contained"
+                  onPress={() => this.showItem(item.id.videoId, 'mp3')}
+                  labelStyle={css.labelBtnFormat}>
+                  MP3
+                </Button>
+                <Button
+                  style={css.btnMore}
+                  mode="contained"
+                  onPress={() => this.showAll_Items(item.id.videoId)}
+                  labelStyle={css.labelBtnMore}>
+                  +
+                </Button>
+              </View>
+            </List.Accordion>
+          ))}
+          {btnLoadMore ?
+            <Button
               style={css.searchMore}
               mode="contained"
               onPress={() => this.searchMore()}
               labelStyle={css.labelSearchMore}>
-                Cargar Más
-              </Button>
+              Cargar Más
+            </Button>
             : null
           }
         </ScrollView>
-          {loading ? (
-            <Portal>
-              <Modal style={css.loadingModal} visible={true}>
-                <ActivityIndicator animating={true} size="large"/>
-              </Modal>
-            </Portal>
-              ) : null
-          }
-          {portalMore ? (
-            <Portal>
-              <Dialog visible={true} onDismiss={this.hideShowMore}>
-                <Dialog.Title style={css.dialogTitle}>FORMATOS DISPONIBLES</Dialog.Title>
-                <Divider/>
-                <Dialog.Content style={css.dialogContent}>
-                  {loadingInPortal ? (
-                      <ActivityIndicator animating={true} size="large"/>
+        {loading ? (
+          <Portal>
+            <Modal style={css.loadingModal} visible={true}>
+              <ActivityIndicator animating={true} size="large" />
+            </Modal>
+          </Portal>
+        ) : null
+        }
+        {portalMore ? (
+          <Portal>
+            <Dialog visible={true} onDismiss={this.hideShowMore}>
+              <Dialog.Title style={css.dialogTitle}>FORMATOS DISPONIBLES</Dialog.Title>
+              <Divider />
+              <Dialog.Content style={css.dialogContent}>
+                {loadingInPortal ? (
+                  <ActivityIndicator animating={true} size="large" />
+                ) : (
+                  <View>
+                    {videowithAudio.map((item, index) => (
+                      <View key={index} style={css.dialogRaw}>
+                        <Button
+                          style={css.dialogBtnMP4}
+                          icon="play"
+                          mode="contained"
+                          onPress={() => this.setEspecificItem(item, 'mp4')}
+                          labelStyle={css.dialogTxtBtn}>
+                          MP4
+                        </Button>
+                        <Surface style={css.surfaceBox}>
+                          <Text style={css.surfaceNum3}>{item.qualityLabel}</Text>
+                        </Surface>
+                        <Surface style={css.surfaceBox}>
+                          <Text style={css.surfaceNum2}>{Math.round((item.contentLength / 1000000) * 10) / 10}</Text>
+                          <Text style={css.surfaceSub}>Mb</Text>
+                        </Surface>
+                      </View>
+                    ))}
+                    {Platform.OS === 'android' ? (
+                      audioonly.map((item, index) => (
+                        <View key={index} style={css.dialogRaw}>
+                          <Button
+                            style={css.dialogBtnMP3}
+                            icon="music"
+                            mode="contained"
+                            onPress={() => this.setEspecificItem(item, 'mp3')}
+                            labelStyle={css.dialogTxtBtn}>
+                            MP3
+                          </Button>
+                          <Surface style={css.surfaceBoxCross}>
+                            <Text style={css.surfaceNum}>{item.audioBitrate}</Text>
+                            <Text style={css.surfaceTxt}>{'Kbps'}</Text>
+                          </Surface>
+                          <Surface style={css.surfaceBox}>
+                            <Text style={css.surfaceNum2}>{Math.round((item.contentLength / 1000000) * 10) / 10}</Text>
+                            <Text style={css.surfaceSub}>Mb</Text>
+                          </Surface>
+                        </View>
+                      ))
                     ) : (
-                        <View>
-                          {videowithAudio.map((item, index) => (
-                            <View key={index} style={css.dialogRaw}>
-                              <Button
-                                style={css.dialogBtnMP4}
-                                icon="play"
-                                mode="contained"
-                                onPress={() => this.setEspecificItem(item, 'mp4')}
-                                labelStyle={css.dialogTxtBtn}>
-                                MP4
-                              </Button>
-                              <Surface style={css.surfaceBox}>
-                                <Text style={css.surfaceNum3}>{item.qualityLabel}</Text>
-                              </Surface>
-                              <Surface style={css.surfaceBox}>
-                              <Text style={css.surfaceNum2}>{Math.round((item.contentLength / 1000000) * 10) / 10}</Text>
-                                <Text style={css.surfaceSub}>Mb</Text>
-                              </Surface>
-                            </View>
-                          ))}
-                          {Platform.OS === 'android' ? (
-                            audioonly.map((item, index) => (
-                              <View key={index} style={css.dialogRaw}>
-                                <Button
-                                  style={css.dialogBtnMP3}
-                                  icon="music"
-                                  mode="contained"
-                                  onPress={() => this.setEspecificItem(item, 'mp3')}
-                                  labelStyle={css.dialogTxtBtn}>
-                                  MP3
-                                  </Button>
-                                <Surface style={css.surfaceBoxCross}>
-                                  <Text style={css.surfaceNum}>{item.audioBitrate}</Text>
-                                  <Text style={css.surfaceTxt}>{'Kbps'}</Text>
-                                </Surface>
-                                <Surface style={css.surfaceBox}>
-                                  <Text style={css.surfaceNum2}>{Math.round((item.contentLength / 1000000) * 10) / 10}</Text>
-                                  <Text style={css.surfaceSub}>Mb</Text>
-                                </Surface>
-                              </View>
-                            ))
-                          ) : (
-                            <View style={css.dialogRaw}>
-                                <Button
-                                  style={css.dialogBtnMP3}
-                                  icon="music"
-                                  mode="contained"
-                                  onPress={() => this.setEspecificItem(song[0], 'mp3')}
-                                  labelStyle={css.dialogTxtBtn}>
-                                  MP3
-                                  </Button>
-                                <Surface style={css.surfaceBoxCross}>
-                                  <Text style={css.surfaceNum}>{song[0].audioBitrate}</Text>
-                                  <Text style={css.surfaceTxt}>{'Kbps'}</Text>
-                                </Surface>
-                                <Surface style={css.surfaceBox}>
-                                  <Text style={css.surfaceNum2}>{Math.round((song[0].contentLength / 1000000) * 10) / 10}</Text>
-                                  <Text style={css.surfaceSub}>Mb</Text>
-                                </Surface>
-                              </View>
-                          )
-                        }
+                      <View style={css.dialogRaw}>
+                        <Button
+                          style={css.dialogBtnMP3}
+                          icon="music"
+                          mode="contained"
+                          onPress={() => this.setEspecificItem(song[0], 'mp3')}
+                          labelStyle={css.dialogTxtBtn}>
+                          MP3
+                        </Button>
+                        <Surface style={css.surfaceBoxCross}>
+                          <Text style={css.surfaceNum}>{song[0].audioBitrate}</Text>
+                          <Text style={css.surfaceTxt}>{'Kbps'}</Text>
+                        </Surface>
+                        <Surface style={css.surfaceBox}>
+                          <Text style={css.surfaceNum2}>{Math.round((song[0].contentLength / 1000000) * 10) / 10}</Text>
+                          <Text style={css.surfaceSub}>Mb</Text>
+                        </Surface>
                       </View>
                     )
-                  }
-                </Dialog.Content>
-                <Dialog.Actions>
-                  <Button onPress={this.hideShowMore}>Regresar</Button>
-                </Dialog.Actions>
-              </Dialog>
-            </Portal>
-              ) : null
-          }
-        </Fragment>
+                    }
+                  </View>
+                )
+                }
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button onPress={this.hideShowMore}>Regresar</Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
+        ) : null
+        }
+      </Fragment>
     );
   }
 }

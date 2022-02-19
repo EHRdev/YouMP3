@@ -10,7 +10,7 @@ import {
 } from 'react-native-paper';
 import {NavigationContainer} from '@react-navigation/native';
 import {name as appName} from './app.json';
-import {appDark, appRed, appYellow} from './src/Styles/Styles';
+import {appDark, appYellow} from './src/Styles/Styles';
 
 const fontConfig = {
   ios: {
@@ -33,14 +33,14 @@ const dark = {
   fonts: configureFonts(fontConfig),
   colors: {
     ...DarkTheme.colors,
-    primary: appYellow, // Botones y Detalles
-    background: appDark, // Fondo
+    primary: appYellow, // Buttons & Details
+    background: appDark, // Background
     surface: appDark, // Surfaces
     onSurface: appDark, // SnackBar
   },
 };
 
-// Envolventes Paper y Navigation
+// Wrapper
 export default function King() {
   return (
     <NavigationContainer>
