@@ -64,10 +64,10 @@ class ListDownloads extends Component {
         }
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        //console.log('You can use storage');
+        console.log('You can use storage');
         this.downloadMachine();
       } else {
-        //console.log('Storage permission denied');
+        console.log('Storage permission denied');
       }
     } catch (err) {
       console.warn(err);
