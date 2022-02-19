@@ -1,16 +1,16 @@
 /* eslint-disable prettier/prettier */
 import 'react-native-gesture-handler'; // Navigation
 import * as React from 'react';
-import {AppRegistry} from 'react-native';
+import { AppRegistry } from 'react-native';
 import App from './src/Navigation/App';
 import {
   configureFonts,
   DarkTheme,
   Provider as PaperProvider,
 } from 'react-native-paper';
-import {NavigationContainer} from '@react-navigation/native';
-import {name as appName} from './app.json';
-import {appDark, appYellow} from './src/Styles/Styles';
+import { NavigationContainer } from '@react-navigation/native';
+import { name as appName } from './app.json';
+import { appDark, appYellow } from './src/Styles/Styles';
 
 const fontConfig = {
   ios: {
